@@ -1,5 +1,10 @@
 .reg-container {
-  background: aquamarine;
+  background: darkmagenta;
+}
+
+.trbl {
+  background: aqua;
+  z-index: 2 !important;
 }
 
 /*# sourceMappingURL=style.css.map */
