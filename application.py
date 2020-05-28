@@ -25,10 +25,17 @@ db = scoped_session(sessionmaker(bind=engine))
 def index():
     return render_template("index.html")
 
+
 @app.route("/books")
 def books():
     books = db.execute("SELECT * from Books").fetchall()
     return render_template("books.html", books=books)
+
+
+@app.route("/authors")
+def authors():
+    books = db.execute("SELECT * from Books").fetchall()
+    return render_template("authors.html", books=books)
 
 
 @app.route("/register", methods=["GET", "POST"])

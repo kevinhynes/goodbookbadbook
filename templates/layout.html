@@ -25,7 +25,7 @@
 
 {#    Navigation Bar#}
     <nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
-      <a class="navbar-brand" href="#">Home</a>
+      <a class="navbar-brand" href="{{ url_for('index')}}">Home</a>
 
 {#      Toggler / Collapse Button#}
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsible_navbar">
@@ -42,7 +42,7 @@
             <a class="nav-link" href="{{ url_for('books')}}">Books</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Authors</a>
+            <a class="nav-link" href="{{ url_for('authors')}}">Authors</a>
           </li>
         </ul>
 
