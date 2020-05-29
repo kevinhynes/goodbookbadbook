@@ -5,11 +5,13 @@
 {% endblock %}
 
 {% block body %}
-  <ul>
-    {% for book in books %}
-      <li>
-        <a href="#">{{ book.title }}</a>
-      </li>
-    {% endfor %}
-  </ul>
+  <div class="container-fluid">
+    <ul>
+      {% for book in books %}
+        <li>
+          <a href="#">{{ book.title }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
 {% endblock %}

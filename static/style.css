@@ -1,8 +1,13 @@
+@media (min-width: 1500px) {
+  .small-container {
+    width: 1000px;
+  }
+}
 .reg-container {
-  background: darkmagenta;
+  background: olivedrab;
 }
 
-.trbl {
+.test {
   background: aqua;
   z-index: 2 !important;
 }
