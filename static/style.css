@@ -1,15 +1,23 @@
-@media (min-width: 1500px) {
-  .small-container {
-    width: 1000px;
+@media (min-width: 576px) {
+  .test {
+    width: 576px;
+  }
+  #login-header::before {
+    content: "Please Log In to GoodBookBadBook"
   }
 }
-.reg-container {
-  background: olivedrab;
+@media (max-width: 575px) {
+  .test {
+    width: 100%;
+  }
+  #login-header::before {
+    content: "Please Log In"
+  }
 }
 
-.test {
-  background: aqua;
-  z-index: 2 !important;
+
+.reg-container {
+  background: olivedrab;
 }
 
 /*# sourceMappingURL=style.css.map */

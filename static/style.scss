@@ -1,6 +1,12 @@
-@media (min-width: 1500px) {
-  .small-container {
-    width: 1000px;
+@media (min-width: 500px) {
+  body {
+    background: darkmagenta;
+  }
+}
+
+@media (max-width: 499px) {
+  body {
+    background: darkcyan;
   }
 }
 
@@ -8,7 +14,3 @@
   background: olivedrab;
 }
 
-.test {
-  background: aqua;
-  z-index: 2 !important;
-}
