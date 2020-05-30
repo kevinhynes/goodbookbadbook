@@ -1,21 +1,29 @@
 @media (min-width: 576px) {
-  .test {
+  .login-container {
     width: 576px;
   }
+
   #login-header::before {
-    content: "Please Log In to GoodBookBadBook"
+    content: "Please Log In to GoodBookBadBook";
+  }
+
+  #signup-header::before {
+    content: "Sign Up for GoodBookBadBook";
   }
 }
 @media (max-width: 575px) {
-  .test {
+  .login-container {
     width: 100%;
   }
+
   #login-header::before {
-    content: "Please Log In"
+    content: "Please Log In";
+  }
+
+  #signup-header::before {
+    content: "Sign Up";
   }
 }
-
-
 .reg-container {
   background: olivedrab;
 }

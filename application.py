@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session, render_template
+from flask import Flask, session, render_template, request
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -43,9 +43,17 @@ def login():
     return render_template("login.html")
 
 
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    return render_template("register.html")
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    username = request.form.get("username")
+    if request.method == "POST":
+        print(f"POST {username}", flush=True)
+    elif request.method == "GET":
+        print(f"GET {username}", flush=True)
+    else:
+        print(f"meh {username}", flush=True)
+
+    return render_template("signup.html")
 
 
 goodreads_api_key = "SdD1S2KiCOWfPmTLyhbrA"
