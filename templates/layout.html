@@ -47,8 +47,8 @@
             </form>
           </li>
         </ul>
-{#        {% block user_tools %}#}
-{#        {% endblock %}#}
+
+{#      Log In / Sign Up / Log Out#}
       {% if not logged_in %}
         <a class="nav-link ml-auto" href="{{ url_for('login') }}">Login</a>
         <a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a>

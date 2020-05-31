@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Book
+{% endblock %}
+
+{% block body %}
+  <div class="container-fluid">
+    <ul>
+      <li><h3>{{ book.title }}</h3></li>
+      <li>written by {{ book.author }}</li>
+      <li>in {{ book.year }}</li>
+      <li>ISBN: {{ book.isbn }}</li>
+
+    </ul>
+  </div>
+{% endblock %}
