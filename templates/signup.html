@@ -1,14 +1,30 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Sign Up
+  Sign Up
 {% endblock %}
 
 {% block body %}
-  <div class="container-fluid login-container border border-light rounded-lg bg-light mt-5">
-  <h3 id="signup-header" class="text-center"></h3>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        {% if category == "error" %}
+        <div class="alert alert-danger signup-alert m-auto text-center" role="alert">
+          {{ message }}
+        </div>
+        {% endif %}
+        {% if category == "success" %}
+        <div class="alert alert-success signup-alert m-auto text-center" role="alert">
+          {{ message }}
+        </div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  <div class="login-container border border-light rounded-lg bg-light ml-auto mr-auto mt-5">
+  <h3 id="signup-header"></h3>
 
-  <form class="form" action="{{ url_for('signup')}}" method="post">
+  <form class="form" action="{{ url_for('signup') }}" method="post">
 
     <div class="form-group">
       <label class="control-label col-4" for="username">Username:</label>
@@ -25,7 +41,7 @@
     </div>
 
     <div class="form-group">
-      <label class="control-label col-4" for="pwd">Repeat Password:</label>
+      <label class="control-label col-4" for="repeat_pwd">Repeat Password:</label>
       <div class="col-12">
         <input id="repeat_pwd" name="repeat_pwd" class="form-control" type="password" placeholder="Passwords must match">
       </div>
@@ -38,7 +54,6 @@
     </div>
 
   </form>
-
 
   </div>
 {% endblock %}
