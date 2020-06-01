@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Book
+  Book
 {% endblock %}
 
 {% block body %}
-  <div class="container-fluid">
-    <ul>
-      <li><h3>{{ book.title }}</h3></li>
-      <li>written by {{ book.author }}</li>
-      <li>in {{ book.year }}</li>
-      <li>ISBN: {{ book.isbn }}</li>
+  <div class="container">
+    <ul class="list-group">
+      <li class="list-group-item"><h3>{{ book.title }}</h3></li>
+      <li class="list-group-item">written by {{ book.author }}</li>
+      <li class="list-group-item">in {{ book.year }}</li>
+      <li class="list-group-item">ISBN: {{ book.isbn }}</li>
 
     </ul>
   </div>

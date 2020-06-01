@@ -56,7 +56,7 @@ def main():
 @login_required  # calls wrapper() with arguments to books().
 def books():
     print(f"books flashes: {session.get('_flashes', [])}", flush=True)
-    books = db.execute("SELECT * from Books").fetchall()
+    books = db.execute("SELECT * from Books ORDER BY Title ASC").fetchall()
     return render_template("books.html", books=books, logged_in=session.get("logged_in", False))
 
 
@@ -73,7 +73,7 @@ def book(book_id):
 @login_required  # calls wrapper() with arguments to authors().
 def authors():
     print(f"authors flashes: {session.get('_flashes', [])}", flush=True)
-    books = db.execute("SELECT * from Books").fetchall()
+    books = db.execute("SELECT DISTINCT Author from Books ORDER BY Author ASC").fetchall()
     return render_template("authors.html", books=books, logged_in=session.get("logged_in", False))
 
 
@@ -118,7 +118,6 @@ def login():
     username = request.form.get("username")
     pwd = request.form.get("pwd")
     print(f"login flashes: {session.get('_flashes', [])}", flush=True)
-
     if request.method == "POST":
         existing_user = db.execute("SELECT * from Users WHERE Username = :username",
                                    {"username": username}).fetchone()
@@ -143,6 +142,16 @@ def logout():
     flash("You have successfully been logged out. Come back soon!", category="success")
     return render_template("logout.html", logged_in=session.get("logged_in", False))
 
+
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    results = []
+    query = request.form.get("search_query")
+    results += db.execute("SELECT * from Books WHERE Title IN (:query)", {"query": query}).fetchall()
+    results += db.execute("SELECT * from Books WHERE Author IN (:query)", {"query": query}).fetchall()
+    results += db.execute("SELECT * from Books WHERE Year IN (:query)", {"query": query}).fetchall()
+    results += db.execute("SELECT * from Books WHERE ISBN IN (:query)", {"query": query}).fetchall()
+    return render_template("search.html", results=results, logged_in=session.get("logged_in", False))
 
 
 goodreads_api_key = "SdD1S2KiCOWfPmTLyhbrA"

@@ -44,4 +44,10 @@
   align-content: center;
 }
 
+.list-container {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
 /*# sourceMappingURL=style.css.map */

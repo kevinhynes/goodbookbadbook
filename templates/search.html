@@ -1,14 +1,14 @@
 {% extends "layout.html" %}
 
 {% block title %}
-  Books
+  Search Results
 {% endblock %}
 
 {% block body %}
-  <div class="container list-container">
-    <ul class="list-group">
-      {% for book in books %}
-        <li class="list-group-item">
+  <div class="container">
+    <ul>
+      {% for book in results %}
+        <li>
           <a href="{{ url_for("book", book_id=book.id) }}">{{ book.title }}</a>
         </li>
       {% endfor %}

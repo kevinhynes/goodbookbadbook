@@ -1,46 +1,45 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Sign Up
+  Sign Up
 {% endblock %}
 
 {% block body %}
-
   <div class="container-fluid login-container border border-light rounded-lg bg-light mt-5">
-  <h3 id="login-header" class="text-center"></h3>
+    <h3 id="login-header" class="text-center"></h3>
 
-  <form class="form" action="{{ url_for('login') }}", method="POST">
+    <form class="form" action="{{ url_for('login') }}", method="POST">
 
-    <div class="form-group">
-      <label class="control-label col-4" for="username">Username:</label>
-      <div class="col-12">
-        <input id="username" name="username" class="form-control" type="text" placeholder="Enter username">
+      <div class="form-group">
+        <label class="control-label col-4" for="username">Username:</label>
+        <div class="col-12">
+          <input id="username" name="username" class="form-control" type="text" placeholder="Enter username">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-4" for="pwd">Password:</label>
+        <div class="col-12">
+          <input id="pwd" name="pwd" class="form-control" type="password" placeholder="Enter password">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-4">
+          <button type="submit" class="btn btn-default btn-outline-secondary">Submit</button>
+        </div>
+      </div>
+
+    </form>
+
+    <div class="row">
+      <div class="col-6 text-center">
+        <a href="#">Forgot Username?</a>
+      </div>
+      <div class="col-6 text-center">
+        <a href="#">Forgot Password?</a>
       </div>
     </div>
-
-    <div class="form-group">
-      <label class="control-label col-4" for="pwd">Password:</label>
-      <div class="col-12">
-        <input id="pwd" name="pwd" class="form-control" type="password" placeholder="Enter password">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-4">
-        <button type="submit" class="btn btn-default btn-outline-secondary">Submit</button>
-      </div>
-    </div>
-
-  </form>
-
-  <div class="row">
-    <div class="col-6 text-center">
-      <a href="#">Forgot Username?</a>
-    </div>
-    <div class="col-6 text-center">
-      <a href="#">Forgot Password?</a>
-    </div>
-  </div>
 
   </div>
 {% endblock %}

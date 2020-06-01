@@ -9,7 +9,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-    {% block scripts %}{% endblock %}
   </head>
   <body>
 
@@ -39,10 +38,11 @@
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('authors') }}">Authors</a>
           </li>
-          <li>
+
 {#      Search Bar#}
-            <form class="form-inline ml-auto">
-              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+          <li>
+            <form class="form-inline ml-auto" action="{{ url_for('search') }}", method="POST">
+              <input name="search_query" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
               <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
           </li>
@@ -58,7 +58,7 @@
       </div>
     </nav>
 
-{#    Body#}
+{#      Flashed Messages#}
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
           {% for category, message in messages %}
@@ -75,6 +75,8 @@
           {% endfor %}
         {% endif %}
       {% endwith %}
+
+{#      Body#}
       {% block body %}
       {% endblock %}
   </body>
