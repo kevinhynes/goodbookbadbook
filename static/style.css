@@ -11,6 +11,10 @@
     width: 576px;
   }
 
+  .authors-list {
+    width: 576px;
+  }
+
   #login-header::before {
     content: "Please Log In to GoodBookBadBook";
   }
@@ -29,6 +33,10 @@
   }
 
   .book-result {
+    width: 100%;
+  }
+
+  .authors-list {
     width: 100%;
   }
 

@@ -8,7 +8,8 @@
   <div class="container-fluid book-result mt-2">
     <ul class="list-group">
       <li class="list-group-item text-center"><h3>{{ book.title }}</h3></li>
-      <li class="list-group-item">written by {{ book.author }} in {{ book.year }}</li>
+      <li class="list-group-item">written by
+        <a href="{{ url_for("author", author_name=book.author) }}">{{ book.author }}</a>  in {{ book.year }}</li>
       <li class="list-group-item">ISBN: {{ book.isbn }}</li>
       <li class="list-group-item">
         <label class="control-label col-4 ml-0 pl-0">Good Reads Rating</label>
@@ -24,20 +25,22 @@
   {% for review in reviews %}
   <div class="card mt-1">
     <div class="card-header">
-      Featured
+      Username
     </div>
     <div class="card-body">
-      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+      <p class="card-text"> Jean-François Champollion the only home we've ever known inconspicuous motes of rock and gas concept of the
+      number one the carbon in our apple pies dispassionate extraterrestrial observer.</p>
     </div>
   </div>
   {% endfor %}
 
   <div class="card mt-1">
     <div class="card-header">
-      Featured
+      Username
     </div>
     <div class="card-body">
-      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+      <p class="card-text"> Jean-François Champollion the only home we've ever known inconspicuous motes of rock and gas concept of the
+      number one the carbon in our apple pies dispassionate extraterrestrial observer.</p>
     </div>
   </div>
 
