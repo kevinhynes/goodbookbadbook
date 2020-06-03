@@ -18,7 +18,7 @@ def create_books_table():
     db.execute("""CREATE TABLE Books(id SERIAL PRIMARY KEY, 
                                      Title TEXT NOT NULL, 
                                      Author TEXT, 
-                                     Year INT, 
+                                     Year TEXT, 
                                      ISBN TEXT NOT NULL)""")
     db.commit()
 

@@ -5,6 +5,9 @@
   .signup-alert {
     width: 576px;
   }
+  .book-result {
+    width: 576px;
+  }
   #login-header::before {
     content: "Please Log In to GoodBookBadBook";
   }
@@ -19,6 +22,9 @@
     width: 100%;
   }
   .signup-alert {
+    width: 100%;
+  }
+  .book-result {
     width: 100%;
   }
   #login-header::before {
@@ -44,5 +50,9 @@
 .list-container {
   list-style-type: none;
   margin: 0;
+  padding: 0;
+}
+
+.book-result {
   padding: 0;
 }

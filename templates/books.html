@@ -5,10 +5,11 @@
 {% endblock %}
 
 {% block body %}
-  <div class="container list-container">
+  <div class="container-fluid list-container mt-2">
+  <h3 class="text-center">Book Titles</h3>
     <ul class="list-group">
       {% for book in books %}
-        <li class="list-group-item">
+        <li class="list-group-item text-center">
           <a href="{{ url_for("book", book_id=book.id) }}">{{ book.title }}</a>
         </li>
       {% endfor %}
