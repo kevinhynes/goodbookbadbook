@@ -13,6 +13,15 @@ def create_user_table():
                                      Hash TEXT NOT NULL)""")
     db.commit()
 
+def create_reviews_table():
+    db.execute("DROP TABLE IF EXISTS Reviews")
+    db.execute("""CREATE TABLE Reviews (id SERIAL PRIMARY KEY,
+                                        BookID INT NOT NULL,
+                                        Username TEXT NOT NULL,
+                                        UserReview TEXT NOT NULL,
+                                        UserRating TEXT NOT NULL)""")
+    db.commit()
+
 def create_books_table():
     db.execute("DROP TABLE IF EXISTS Books")
     db.execute("""CREATE TABLE Books(id SERIAL PRIMARY KEY, 
@@ -21,7 +30,6 @@ def create_books_table():
                                      Year TEXT, 
                                      ISBN TEXT NOT NULL)""")
     db.commit()
-
 
 def import_data():
     f = open("books.csv")
@@ -33,6 +41,7 @@ def import_data():
 
 if __name__ == "__main__":
     # create_user_table()
+    # create_reviews_table()
     # create_books_table()
     # import_data()
     pass

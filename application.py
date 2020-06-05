@@ -61,7 +61,7 @@ def signup():
 
 
 def validate_registration(username, pwd, repeat_pwd):
-    existing_user = db.execute("SELECT * from Users WHERE Username = :username",
+    existing_user = db.execute("SELECT * FROM Users WHERE Username = :username",
                                {"username": username}).fetchone()
     # print(f"validate_registration flashes: {session.get('_flashes', [])}", flush=True)
     if existing_user:
@@ -85,7 +85,7 @@ def login():
     pwd = request.form.get("pwd")
     # print(f"login flashes: {session.get('_flashes', [])}", flush=True)
     if request.method == "POST":
-        existing_user = db.execute("SELECT * from Users WHERE Username = :username",
+        existing_user = db.execute("SELECT * FROM Users WHERE Username = :username",
                                    {"username": username}).fetchone()
         if not existing_user:
             flash("No user found. Please sign up first.", category="error")
@@ -95,6 +95,7 @@ def login():
             return
         else:
             session["logged_in"] = True
+            session["username"] = username
             flash("Login successful. Thank you for using GoodBookBadBook.", category="success")
             return redirect(url_for('main'))
     return render_template("login.html")
@@ -104,6 +105,7 @@ def login():
 def logout():
     # print(f"logout flashes: {session.get('_flashes', [])}", flush=True)
     session.pop("logged_in", None)
+    session.pop("username", None)
     flash("You have successfully been logged out. Come back soon!", category="success")
     return render_template("logout.html", logged_in=session.get("logged_in", False))
 
@@ -125,15 +127,35 @@ def main():
 @login_required  # calls wrapper() with arguments to books().
 def books():
     # print(f"books flashes: {session.get('_flashes', [])}", flush=True)
-    books = db.execute("SELECT * from Books ORDER BY Title ASC").fetchall()
+    books = db.execute("SELECT * FROM Books ORDER BY Title ASC").fetchall()
     return render_template("books.html", books=books, logged_in=session.get("logged_in", False))
 
 
-@app.route("/books/<int:book_id>")
+@app.route("/books/<int:book_id>", methods=["GET", "POST"])
 @login_required  # calls wrapper() with arguments to books().
 def book(book_id):
     # print(f"book flashes: {session.get('_flashes', [])}", flush=True)
-    book = db.execute("SELECT * from Books WHERE id = :book_id", {"book_id": book_id}).fetchone()
+    if request.method == "POST":
+        user_review = request.form.get("user_review")
+        user_rating = request.form.get("rating")
+        username = session["username"]
+        existing_review = db.execute("""SELECT * FROM Reviews WHERE BookID = :book_id
+                                        AND Username = :username""",
+                                     {"book_id": book_id, "username": username}).fetchone()
+        if existing_review:
+            flash("You've already submitted a review for this book.", category="error")
+        else:
+            db.execute("""INSERT INTO Reviews(BookID, Username, UserReview, UserRating)
+                          VALUES(:book_id, :username, :user_review, :user_rating)""",
+                          {"book_id": book_id, "username": username, "user_review": user_review,
+                           "user_rating": user_rating})
+            db.commit()
+
+        print(f"book() user_review: {user_review,user_rating}", flush=True)
+    reviews = db.execute("""SELECT * FROM Reviews WHERE BookID = :book_id""",
+                         {"book_id": book_id}).fetchall()
+
+    book = db.execute("SELECT * FROM Books WHERE id = :book_id", {"book_id": book_id}).fetchone()
     res = requests.get("https://www.goodreads.com/book/review_counts.json",
                        params={"key": goodreads_api_key, "isbns": book.isbn})
     book_data = res.json()["books"][0]
@@ -141,14 +163,15 @@ def book(book_id):
     rating_width = str((float(rating) / 5) * 100) + "%"
     ratings_count = book_data["ratings_count"]
     return render_template("book.html", book=book, rating=rating, rating_width=rating_width,
-                           ratings_count=ratings_count, logged_in=session.get("logged_in", False))
+                           ratings_count=ratings_count, reviews=reviews,
+                           logged_in=session.get("logged_in", False))
 
 
 @app.route("/authors")
 @login_required  # calls wrapper() with arguments to authors().
 def authors():
     # print(f"authors flashes: {session.get('_flashes', [])}", flush=True)
-    books = db.execute("SELECT DISTINCT Author from Books ORDER BY Author ASC").fetchall()
+    books = db.execute("SELECT DISTINCT Author FROM Books ORDER BY Author ASC").fetchall()
     return render_template("authors.html", books=books, logged_in=session.get("logged_in", False))
 
 
@@ -156,8 +179,7 @@ def authors():
 @login_required  # calls wrapper() with arguments to books().
 def author(author_name):
     # print(f"author flashes: {session.get('_flashes', [])}", flush=True)
-    print(f"AUTHOR_NAME: {author_name}")
-    results = db.execute("SELECT * from Books WHERE Author IN (:author) ORDER BY Title ASC",
+    results = db.execute("SELECT * FROM Books WHERE Author IN (:author) ORDER BY Title ASC",
                        {"author": author_name}).fetchall()
     return render_template("author.html", results=results, logged_in=session.get("logged_in", False))
 
@@ -168,9 +190,9 @@ def search():
     # print(f"authors flashes: {session.get('_flashes', [])}", flush=True)
     results = []
     query = '%' + request.form.get("search_query") + '%'
-    results += db.execute("SELECT * from Books WHERE Title LIKE (:query)", {"query": query}).fetchall()
-    results += db.execute("SELECT * from Books WHERE Author LIKE (:query)", {"query": query}).fetchall()
-    results += db.execute("SELECT * from Books WHERE Year LIKE (:query)", {"query": query}).fetchall()
-    results += db.execute("SELECT * from Books WHERE ISBN LIKE (:query)", {"query": query}).fetchall()
+    results += db.execute("SELECT * FROM Books WHERE Title LIKE (:query)", {"query": query}).fetchall()
+    results += db.execute("SELECT * FROM Books WHERE Author LIKE (:query)", {"query": query}).fetchall()
+    results += db.execute("SELECT * FROM Books WHERE Year LIKE (:query)", {"query": query}).fetchall()
+    results += db.execute("SELECT * FROM Books WHERE ISBN LIKE (:query)", {"query": query}).fetchall()
     return render_template("search.html", results=results, logged_in=session.get("logged_in", False))
 
