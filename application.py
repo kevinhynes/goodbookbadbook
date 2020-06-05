@@ -1,5 +1,5 @@
 import os
-from flask import Flask, session, request, render_template, url_for, redirect, flash
+from flask import Flask, session, request, render_template, url_for, redirect, flash, jsonify
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -96,7 +96,7 @@ def login():
         else:
             session["logged_in"] = True
             session["username"] = username
-            flash("Login successful. Thank you for using GoodBookBadBook.", category="success")
+            # flash("Login successful. Thank you for using GoodBookBadBook.", category="success")
             return redirect(url_for('main'))
     return render_template("login.html")
 
@@ -196,3 +196,18 @@ def search():
     results += db.execute("SELECT * FROM Books WHERE ISBN LIKE (:query)", {"query": query}).fetchall()
     return render_template("search.html", results=results, logged_in=session.get("logged_in", False))
 
+
+@app.route("/api/<string:isbn>")
+def book_api(isbn):
+    book = db.execute("SELECT * FROM Books WHERE ISBN = :isbn", {"isbn": isbn}).fetchone()
+    if not book:
+        return jsonify({"error": "Invalid ISBN"}), 422
+    res = requests.get("https://www.goodreads.com/book/review_counts.json",
+                       params={"key": goodreads_api_key, "isbns": book.isbn})
+    book_data = res.json()["books"][0]
+    return jsonify({"title": book.title,
+                    "author": book.author,
+                    "year": book.year,
+                    "isbn": book.isbn,
+                    "review_count": book_data["work_reviews_count"],
+                    "average_score": book_data["average_rating"]})
