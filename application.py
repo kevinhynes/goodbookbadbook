@@ -15,8 +15,6 @@ app = Flask(__name__)
 #     raise RuntimeError("DATABASE_URL is not set")
 
 goodreads_api_key = "SdD1S2KiCOWfPmTLyhbrA"
-goodreads_api_secret = "9EdAKZcsPeJfbrvx9spqGmKkfpciXnshhJyk0s18Q"
-
 DATABASE_URL = "postgres://ptmrfpvcfmsizq:7f83f5d65df0a7c6cfc6af9727298623597efdada2c02b0d5cd035c5eda787d3@ec2-3-216-129-140.compute-1.amazonaws.com:5432/d2ssl9jq5udmv7"
 app.config["DATABASE_URL"] = DATABASE_URL
 
@@ -34,7 +32,6 @@ db = scoped_session(sessionmaker(bind=engine))
 def login_required(route_func):
     @functools.wraps(route_func)  # returns wrapper as route_func (?).
     def wrapper(*args, **kwargs):
-        # print(f"wrapper flashes: {session.get('_flashes', [])}, args: {args}, kwargs: {kwargs}", flush=True)
         if "logged_in" in session:
             return route_func(*args, **kwargs)
         else:
@@ -48,7 +45,6 @@ def signup():
     username = request.form.get("username")
     pwd = request.form.get("pwd")
     repeat_pwd = request.form.get("repeat_pwd")
-    # print(f"signup flashes: {session.get('_flashes', [])}", flush=True)
     if request.method == "POST":
         if validate_registration(username, pwd, repeat_pwd):
             hash = generate_password_hash(pwd)
@@ -63,7 +59,6 @@ def signup():
 def validate_registration(username, pwd, repeat_pwd):
     existing_user = db.execute("SELECT * FROM Users WHERE Username = :username",
                                {"username": username}).fetchone()
-    # print(f"validate_registration flashes: {session.get('_flashes', [])}", flush=True)
     if existing_user:
         flash("Username unavailable.", category="error")
         return False
@@ -96,14 +91,12 @@ def login():
         else:
             session["logged_in"] = True
             session["username"] = username
-            # flash("Login successful. Thank you for using GoodBookBadBook.", category="success")
             return redirect(url_for('main'))
     return render_template("login.html")
 
 
 @app.route("/logout")
 def logout():
-    # print(f"logout flashes: {session.get('_flashes', [])}", flush=True)
     session.pop("logged_in", None)
     session.pop("username", None)
     flash("You have successfully been logged out. Come back soon!", category="success")
@@ -112,21 +105,18 @@ def logout():
 
 @app.route("/")
 def index():
-    # print(f"index flashes: {session.get('_flashes', [])}", flush=True)
     return render_template("index.html", logged_in=session.get("logged_in", False))
 
 
 @app.route("/main")
 @login_required
 def main():
-    # print(f"main flashes: {session.get('_flashes', [])}", flush=True)
     return render_template("main.html", logged_in=session.get("logged_in", False))
 
 
 @app.route("/books")
 @login_required  # calls wrapper() with arguments to books().
 def books():
-    # print(f"books flashes: {session.get('_flashes', [])}", flush=True)
     books = db.execute("SELECT * FROM Books ORDER BY Title ASC").fetchall()
     return render_template("books.html", books=books, logged_in=session.get("logged_in", False))
 
@@ -134,7 +124,6 @@ def books():
 @app.route("/books/<int:book_id>", methods=["GET", "POST"])
 @login_required  # calls wrapper() with arguments to books().
 def book(book_id):
-    # print(f"book flashes: {session.get('_flashes', [])}", flush=True)
     if request.method == "POST":
         user_review = request.form.get("user_review")
         user_rating = request.form.get("rating")
@@ -170,7 +159,6 @@ def book(book_id):
 @app.route("/authors")
 @login_required  # calls wrapper() with arguments to authors().
 def authors():
-    # print(f"authors flashes: {session.get('_flashes', [])}", flush=True)
     books = db.execute("SELECT DISTINCT Author FROM Books ORDER BY Author ASC").fetchall()
     return render_template("authors.html", books=books, logged_in=session.get("logged_in", False))
 
@@ -178,7 +166,6 @@ def authors():
 @app.route("/authors/<string:author_name>")
 @login_required  # calls wrapper() with arguments to books().
 def author(author_name):
-    # print(f"author flashes: {session.get('_flashes', [])}", flush=True)
     results = db.execute("SELECT * FROM Books WHERE Author IN (:author) ORDER BY Title ASC",
                        {"author": author_name}).fetchall()
     return render_template("author.html", results=results, logged_in=session.get("logged_in", False))
@@ -187,7 +174,6 @@ def author(author_name):
 @app.route("/search", methods=["GET", "POST"])
 @login_required
 def search():
-    # print(f"authors flashes: {session.get('_flashes', [])}", flush=True)
     results = []
     query = '%' + request.form.get("search_query") + '%'
     results += db.execute("SELECT * FROM Books WHERE Title LIKE (:query)", {"query": query}).fetchall()
